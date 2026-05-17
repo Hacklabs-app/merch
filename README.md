@@ -72,7 +72,7 @@ pnpm lint
 ```
 
 ## CI/CD Pipeline
-Every Pull Request to `dev` or `main` automatically runs strict `pnpm lint` and `pnpm build` checks. Merging into `main` automatically triggers a zero-downtime deployment to Google Cloud Run.
+Every Pull Request to `main` automatically runs strict `pnpm lint` and `pnpm build` checks. Merging into `main` automatically triggers a zero-downtime deployment to Google Cloud Run.
 
 ---
 
