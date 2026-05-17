@@ -1,4 +1,4 @@
-name: Deploy to Firebase
+name: Deploy to Cloud Run
 
 on:
   push:
@@ -14,24 +14,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
+      - id: auth
+        uses: google-github-actions/auth@v2
         with:
-          node-version: 22
-          cache: pnpm
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
-      - name: Build
-        env:
-          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
-        run: pnpm build
+      - name: Build and Deploy
+        run: |
+          gcloud builds submit --tag gcr.io/${{ secrets.FIREBASE_PROJECT_ID }}/merch-frontend \
+            --build-arg NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          gcloud run deploy merch-frontend \
+            --image gcr.io/${{ secrets.FIREBASE_PROJECT_ID }}/merch-frontend \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
-          channelId: live
