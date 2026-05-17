@@ -1,5 +1,4 @@
 import PageActual from './page_actual'
-import type { Metadata } from 'next'
 
 export const generateStaticParams = () => []
 
