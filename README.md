@@ -1,22 +1,24 @@
 # Merch KE Frontend
 
-Tech swag marketplace for Kenya - built with Next.js 14, TypeScript, and Tailwind CSS.
+Tech swag marketplace for Kenya - built with Next.js App Router, TypeScript, and Tailwind CSS.
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
+- Node.js 22+ 
+- [pnpm](https://pnpm.io/) (v10.33+)
 - Merch KE API running (default: http://localhost:8080)
 
 ### Installation
 
+We use `pnpm` exclusively to manage dependencies for faster and stricter installs.
+
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Run development server
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -29,16 +31,13 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-### Production (`.env.production`)
-```env
-NEXT_PUBLIC_API_BASE_URL=https://merch-ke-api-779644650318.us-central1.run.app
-NEXT_PUBLIC_SITE_URL=https://your-production-domain.com
-```
+### Production
+Deployed securely via Google Cloud Run. Production environment variables are securely injected at build time by our GitHub Actions CI/CD pipeline using secrets.
 
 ## Project Structure
 
 ```
-├── app/                    # Next.js 14 App Router
+├── app/                    # Next.js 15 App Router
 │   ├── globals.css        # Global styles
 │   ├── layout.tsx         # Root layout
 │   └── page.tsx           # Home page
@@ -52,41 +51,36 @@ NEXT_PUBLIC_SITE_URL=https://your-production-domain.com
 
 ## API Integration
 
-The frontend communicates with the Merch KE API. All API calls are handled through:
+The frontend communicates with the Merch KE API via Axios:
 - `lib/api/client.ts` - Axios client with interceptors
 - `lib/api/endpoints.ts` - API endpoint functions
-
-### Features
-- Automatic JWT token injection
-- Guest session ID management
-- Cart migration after login
-- Error handling and redirects
-
-## Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui
-- **HTTP Client**: Axios
-- **Icons**: Lucide React
 
 ## Development
 
 ```bash
 # Run dev server
-npm run dev
+pnpm dev
 
 # Build for production
-npm run build
+pnpm build
 
 # Start production server
-npm start
+pnpm start
 
 # Lint code
-npm run lint
+pnpm lint
 ```
 
-## License
+## CI/CD Pipeline
+Every Pull Request to `dev` or `main` automatically runs strict `pnpm lint` and `pnpm build` checks. Merging into `main` automatically triggers a zero-downtime deployment to Google Cloud Run.
 
-Private - Merch KE
+---
+
+### Contributors
+
+<a href="https://github.com/Hacklabs-app/merch/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Hacklabs-app/merch" />
+</a>
+
+---
+Built with ❤️ by [Hacklabs](https://hacklabs.app)
